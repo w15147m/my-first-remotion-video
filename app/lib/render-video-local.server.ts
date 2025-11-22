@@ -34,7 +34,7 @@ export const renderVideoLocally = async ({
   // Create output directory
   const outputDir = path.join(process.cwd(), "public", "videos");
   await mkdir(outputDir, { recursive: true });
-
+  
   const renderId = randomUUID();
   const outputPath = path.join(outputDir, `${renderId}-${outName}`);
 

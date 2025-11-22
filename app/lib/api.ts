@@ -38,11 +38,14 @@ const makeRequest = async <Res>(
 
 export const renderVideo = async ({
   inputProps,
+  filename, // Add this parameter
 }: {
   inputProps: z.infer<typeof CompositionProps>;
+  filename?: string; // Add this parameter
 }) => {
   const body: z.infer<typeof RenderRequest> = {
     inputProps,
+    filename, // Add this line
   };
 
   return makeRequest<RenderResponse>("/api/lambda/render", body);

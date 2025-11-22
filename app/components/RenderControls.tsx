@@ -16,7 +16,17 @@ export const RenderControls: React.FC<{
   setText: React.Dispatch<React.SetStateAction<string>>;
   inputProps: z.infer<typeof CompositionProps>;
 }> = ({ text, setText, inputProps }) => {
-  const { renderMedia, state, undo } = useRendering(COMPOSITION_ID, inputProps);
+  // Create a safe filename from the text
+  const filename = text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric with hyphens
+    .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
+
+  const { renderMedia, state, undo } = useRendering(
+    COMPOSITION_ID, 
+    inputProps,
+    filename // Pass the filename
+  );
 
   return (
     <InputContainer>

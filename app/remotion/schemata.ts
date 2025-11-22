@@ -10,6 +10,7 @@ export const defaultMyCompProps: z.infer<typeof CompositionProps> = {
 
 export const RenderRequest = z.object({
   inputProps: CompositionProps,
+  filename: z.string().optional(), // Add this line
 });
 
 export const ProgressRequest = z.object({
