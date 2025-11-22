@@ -12,7 +12,6 @@ export const action: ActionFunction = errorAsJson(
     const videosDir = path.join(process.cwd(), "public", "videos");
 
     try {
-      // Find any file that starts with the renderId
       const files = await readdir(videosDir);
       const videoFile = files.find(file => file.startsWith(id));
 
