@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { Spacing } from "../Spacing";
+import { Spacing } from "../layout/Spacing";
 import { Spinner } from "./Spinner";
 import { cn } from "~/lib/utils";
 
