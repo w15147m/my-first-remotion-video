@@ -5,14 +5,14 @@ import {
   COMPOSITION_FPS,
   COMPOSITION_HEIGHT,
   COMPOSITION_WIDTH,
-} from "./remotion/constants.mjs";
-import "./app.css";
+} from "~/remotion/constants.mjs";
+import "../app.css";
 import { z } from "zod";
-import { Main } from "./remotion/components/Main";
-import { RenderControls } from "./components/video/RenderControls";
-import { Spacing } from "./components/layout/Spacing";
-import { Tips } from "./components/ui/Tips";
-import { CompositionProps } from "./remotion/schemata";
+import { Main } from "~/remotion/components/Main"; 
+import { RenderControls } from "~/components/video/RenderControls"; 
+import { Spacing } from "~/components/layout/Spacing"; 
+import { Tips } from "~/components/ui/Tips"; 
+import { CompositionProps } from "remotion"; 
 
 export default function Index() {
   const [text, setText] = useState("React Router + Remotion");
