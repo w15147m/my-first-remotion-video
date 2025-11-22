@@ -22,11 +22,17 @@ const container: React.CSSProperties = {
   backgroundColor: "#1a1a2e",
 };
 
-export const Main = ({ title }: z.infer<typeof CompositionProps>) => {
+export const Main = ({ 
+  title,
+  durationInSeconds // Added duration prop
+}: z.infer<typeof CompositionProps>) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
 
-  // Animation timings
+  // Calculate total frames from duration
+  const totalFrames = durationInSeconds * fps;
+
+  // Animation timings (adjusted to be relative to duration)
   const titleStart = 20;
   const particlesStart = 0;
   
@@ -78,10 +84,10 @@ export const Main = ({ title }: z.infer<typeof CompositionProps>) => {
     }));
   }, [width, height]);
 
-  // Background gradient animation
+  // Background gradient animation (adjusted to total frames)
   const gradientRotation = interpolate(
     frame,
-    [0, 210],
+    [0, totalFrames],
     [0, 360],
     {
       extrapolateRight: "wrap",
@@ -141,7 +147,7 @@ export const Main = ({ title }: z.infer<typeof CompositionProps>) => {
               const particleFrame = frame - particle.delay;
               const y = interpolate(
                 particleFrame,
-                [0, 210],
+                [0, totalFrames],
                 [particle.y, particle.y - height * particle.speed],
                 {
                   extrapolateRight: "wrap",
@@ -151,7 +157,7 @@ export const Main = ({ title }: z.infer<typeof CompositionProps>) => {
 
               const opacity = interpolate(
                 particleFrame,
-                [0, 10, 200, 210],
+                [0, 10, totalFrames - 10, totalFrames],
                 [0, 0.6, 0.6, 0],
                 {
                   extrapolateLeft: "clamp",
@@ -248,7 +254,7 @@ export const Main = ({ title }: z.infer<typeof CompositionProps>) => {
 
             const rotate = interpolate(
               decorFrame,
-              [0, 180],
+              [0, totalFrames - 30],
               [corner.rotation, corner.rotation + 360],
               {
                 extrapolateLeft: "clamp",

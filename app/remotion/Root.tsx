@@ -18,7 +18,10 @@ export const RemotionRoot = () => {
         fps={COMPOSITION_FPS}
         width={COMPOSITION_WIDTH}
         height={COMPOSITION_HEIGHT}
-        defaultProps={{ title: "stranger" }}
+        defaultProps={{ 
+          title: "stranger",
+          durationInSeconds: 7, // Added default duration
+        }}
       />
     </>
   );

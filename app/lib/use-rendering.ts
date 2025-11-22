@@ -38,7 +38,7 @@ const wait = async (milliSeconds: number) => {
 export const useRendering = (
   id: string,
   inputProps: z.infer<typeof CompositionProps>,
-  filename?: string, // Add this parameter
+  filename?: string,
 ) => {
   const [state, setState] = useState<State>({
     status: "init",
@@ -51,51 +51,71 @@ export const useRendering = (
     try {
       const { renderId, bucketName } = await renderVideo({ 
         inputProps,
-        filename, // Pass the filename
+        filename,
       });
+      
       setState({
         status: "rendering",
         progress: 0,
         renderId: renderId,
-        bucketName: bucketName,
+        bucketName: bucketName || filename || "video.mp4",
       });
 
       let pending = true;
+      let attempts = 0;
+      const maxAttempts = 120; // Wait up to 2 minutes (120 * 1000ms)
 
-      while (pending) {
-        const result = await getProgress({
-          id: renderId,
-          bucketName: bucketName,
-        });
-        switch (result.type) {
-          case "error": {
-            setState({
-              status: "error",
-              renderId: renderId,
-              error: new Error(result.message),
-            });
-            pending = false;
-            break;
+      while (pending && attempts < maxAttempts) {
+        try {
+          const result = await getProgress({
+            id: renderId,
+            bucketName: bucketName || filename || "video.mp4",
+          });
+          
+          switch (result.type) {
+            case "error": {
+              setState({
+                status: "error",
+                renderId: renderId,
+                error: new Error(result.message),
+              });
+              pending = false;
+              break;
+            }
+            case "done": {
+              setState({
+                size: result.size,
+                url: result.url,
+                status: "done",
+              });
+              pending = false;
+              break;
+            }
+            case "progress": {
+              setState({
+                status: "rendering",
+                bucketName: bucketName || filename || "video.mp4",
+                progress: result.progress,
+                renderId: renderId,
+              });
+              await wait(1000);
+              attempts++;
+              break;
+            }
           }
-          case "done": {
-            setState({
-              size: result.size,
-              url: result.url,
-              status: "done",
-            });
-            pending = false;
-            break;
-          }
-          case "progress": {
-            setState({
-              status: "rendering",
-              bucketName: bucketName,
-              progress: result.progress,
-              renderId: renderId,
-            });
-            await wait(1000);
-          }
+        } catch (err) {
+          // If progress check fails, keep trying
+          await wait(1000);
+          attempts++;
         }
+      }
+
+      if (attempts >= maxAttempts) {
+        setState({
+          status: "error",
+          error: new Error("Rendering timeout - video may still be processing"),
+          renderId: renderId,
+        });
       }
     } catch (err) {
       setState({
@@ -104,7 +124,7 @@ export const useRendering = (
         renderId: null,
       });
     }
-  }, [inputProps, filename]); // Add filename to dependencies
+  }, [inputProps, filename]);
 
   const undo = useCallback(() => {
     setState({ status: "init" });

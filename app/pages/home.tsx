@@ -1,7 +1,6 @@
 import { Player } from "@remotion/player";
 import { useMemo, useState } from "react";
 import {
-  DURATION_IN_FRAMES,
   COMPOSITION_FPS,
   COMPOSITION_HEIGHT,
   COMPOSITION_WIDTH,
@@ -16,12 +15,19 @@ import { CompositionProps } from "~/remotion/schemata";
 
 export default function Index() {
   const [text, setText] = useState("React Router + Remotion");
+  const [duration, setDuration] = useState(7); // Added duration state
 
   const inputProps: z.infer<typeof CompositionProps> = useMemo(() => {
     return {
       title: text,
+      durationInSeconds: duration, // Added duration to props
     };
-  }, [text]);
+  }, [text, duration]);
+
+  // Calculate duration in frames dynamically
+  const durationInFrames = useMemo(() => {
+    return duration * COMPOSITION_FPS;
+  }, [duration]);
 
   return (
     <div>
@@ -30,7 +36,7 @@ export default function Index() {
           <Player
             component={Main}
             inputProps={inputProps}
-            durationInFrames={DURATION_IN_FRAMES}
+            durationInFrames={durationInFrames} // Now dynamic!
             fps={COMPOSITION_FPS}
             compositionHeight={COMPOSITION_HEIGHT}
             compositionWidth={COMPOSITION_WIDTH}
@@ -47,13 +53,15 @@ export default function Index() {
         <RenderControls
           text={text}
           setText={setText}
+          duration={duration}
+          setDuration={setDuration}
           inputProps={inputProps}
-        ></RenderControls>
-        <Spacing></Spacing>
-        <Spacing></Spacing>
-        <Spacing></Spacing>
-        <Spacing></Spacing>
-        <Tips></Tips>
+        />
+        <Spacing />
+        <Spacing />
+        <Spacing />
+        <Spacing />
+        <Tips />
       </div>
     </div>
   );

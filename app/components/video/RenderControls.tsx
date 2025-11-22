@@ -14,18 +14,21 @@ import { CompositionProps } from "~/remotion/schemata";
 export const RenderControls: React.FC<{
   text: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
+  duration: number;
+  setDuration: React.Dispatch<React.SetStateAction<number>>;
   inputProps: z.infer<typeof CompositionProps>;
-}> = ({ text, setText, inputProps }) => {
+}> = ({ text, setText, duration, setDuration, inputProps }) => {
   // Create a safe filename from the text
   const filename = text
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric with hyphens
-    .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
+    .replace(/^-+|-+$/g, "") // Remove leading/trailing hyphens
+    + ".mp4"; // Add .mp4 extension
 
   const { renderMedia, state, undo } = useRendering(
     COMPOSITION_ID, 
     inputProps,
-    filename // Pass the filename
+    filename
   );
 
   return (
@@ -34,12 +37,44 @@ export const RenderControls: React.FC<{
       state.status === "invoking" ||
       state.status === "error" ? (
         <>
-          <Input
-            disabled={state.status === "invoking"}
-            setText={setText}
-            text={text}
-          ></Input>
-          <Spacing></Spacing>
+          {/* Title Input */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              Video Title
+            </label>
+            <Input
+              disabled={state.status === "invoking"}
+              setText={setText}
+              text={text}
+              placeholder="Enter video title"
+              name="title"
+            />
+          </div>
+          
+          <Spacing />
+
+          {/* Duration Input */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              Duration (seconds)
+            </label>
+            <Input
+              type="number"
+              disabled={state.status === "invoking"}
+              value={duration}
+              onChange={(e) => setDuration(Number(e.target.value))}
+              min={1}
+              max={60}
+              placeholder="Enter duration in seconds"
+              name="duration"
+            />
+            <p className="text-xs text-subtitle mt-1">
+              Video length: {duration} seconds ({duration * 30} frames at 30 FPS)
+            </p>
+          </div>
+
+          <Spacing />
+          
           <AlignEnd>
             <Button
               disabled={state.status === "invoking"}
@@ -49,6 +84,7 @@ export const RenderControls: React.FC<{
               Render video
             </Button>
           </AlignEnd>
+          
           {state.status === "error" ? (
             <ErrorComp message={state.error.message}></ErrorComp>
           ) : null}
