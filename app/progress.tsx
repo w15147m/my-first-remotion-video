@@ -1,45 +1,36 @@
-import {
-  getRenderProgress,
-  speculateFunctionName,
-} from "@remotion/lambda/client";
 import { ActionFunction } from "react-router";
 import { errorAsJson } from "./lib/return-error-as-json";
 import { ProgressRequest, ProgressResponse } from "./remotion/schemata";
-import { DISK, RAM, REGION, TIMEOUT } from "./remotion/constants.mjs";
+import { stat } from "fs/promises";
+import path from "path";
 
 export const action: ActionFunction = errorAsJson(
   async ({ request }): Promise<ProgressResponse> => {
     const body = await request.json();
-    const { bucketName, id } = ProgressRequest.parse(body);
+    const { id } = ProgressRequest.parse(body);
 
-    const renderProgress = await getRenderProgress({
-      renderId: id,
-      bucketName,
-      functionName: speculateFunctionName({
-        diskSizeInMb: DISK,
-        memorySizeInMb: RAM,
-        timeoutInSeconds: TIMEOUT,
-      }),
-      region: REGION,
-    });
-    if (renderProgress.fatalErrorEncountered) {
-      return {
-        type: "error",
-        message: renderProgress.errors[0].message,
-      };
-    }
+    // For local rendering, we check if the file exists
+    const videoPath = path.join(
+      process.cwd(),
+      "public",
+      "videos",
+      `${id}-logo-animation.mp4`
+    );
 
-    if (renderProgress.done) {
+    try {
+      const stats = await stat(videoPath);
+      
       return {
         type: "done",
-        url: renderProgress.outputFile as string,
-        size: renderProgress.outputSizeInBytes as number,
+        url: `/videos/${id}-logo-animation.mp4`,
+        size: stats.size,
+      };
+    } catch (error) {
+      // File doesn't exist yet, still rendering
+      return {
+        type: "progress",
+        progress: 0.5, // Mock progress
       };
     }
-
-    return {
-      type: "progress",
-      progress: Math.max(0.03, renderProgress.overallProgress),
-    };
-  },
+  }
 );
