@@ -1,13 +1,13 @@
 import { z } from "zod";
-import { AlignEnd } from "./layout/AlignEnd";
-import { Button } from "./ui/Button";
-import { InputContainer } from "./layout/InputContainer";
-import { DownloadButton } from "./ui/DownloadButton";
-import { ErrorComp } from "./ui/Error";
-import { Input } from "./ui/Input";
-import { ProgressBar } from "./ui/ProgressBar";
-import { Spacing } from "./layout/Spacing";
-import { useRendering } from "../lib/use-rendering";
+import { AlignEnd } from "../layout/AlignEnd";
+import { Button } from "../ui/Button";
+import { InputContainer } from "../layout/InputContainer";
+import { DownloadButton } from "../ui/DownloadButton";
+import { ErrorComp } from "../ui/Error";
+import { Input } from "../ui/Input";
+import { ProgressBar } from "../ui/ProgressBar";
+import { Spacing } from "../layout/Spacing";
+import { useRendering } from "../../lib/use-rendering";
 import { COMPOSITION_ID } from "~/remotion/constants.mjs";
 import { CompositionProps } from "~/remotion/schemata";
 
