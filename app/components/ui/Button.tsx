@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import { Spacing } from "../Spacing";
-import { Spinner } from "../Spinner";
+import { Spinner } from "./Spinner";
 import { cn } from "~/lib/utils";
 
 const ButtonForward: React.ForwardRefRenderFunction<
