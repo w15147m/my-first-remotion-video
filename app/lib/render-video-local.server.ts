@@ -15,7 +15,7 @@ export const renderVideoLocally = async ({
   composition: string;
   inputProps: z.infer<typeof CompositionProps>;
   outName: string;
-}): Promise<{ renderId: string; outputPath: string }> => {
+}): Promise<{ renderId: string; bucketName: string; outputPath: string }> => {
   console.log("Starting local video render...");
   console.log("Duration in seconds:", inputProps.durationInSeconds);
 
