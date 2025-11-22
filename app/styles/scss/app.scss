@@ -1,20 +1,16 @@
-@import "tailwindcss";
 
 :root {
   --background: #fff;
   --foreground: #000;
   --unfocused-border-color: #eaeaea;
   --focused-border-color: #666;
-
   --button-disabled-color: #fafafa;
   --disabled-text-color: #999;
-
   --geist-border-radius: 5px;
   --geist-quarter-pad: 6px;
   --geist-half-pad: 12px;
   --geist-pad: 24px;
   --geist-font: "Inter";
-
   --geist-error: #e00;
 
   --subtitle: #666;
