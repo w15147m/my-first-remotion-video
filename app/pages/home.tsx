@@ -12,7 +12,7 @@ import { Main } from "~/remotion/components/Main";
 import { RenderControls } from "~/components/video/RenderControls"; 
 import { Spacing } from "~/components/layout/Spacing"; 
 import { Tips } from "~/components/ui/Tips"; 
-import { CompositionProps } from "remotion"; 
+import { CompositionProps } from "~/remotion/schemata";
 
 export default function Index() {
   const [text, setText] = useState("React Router + Remotion");
