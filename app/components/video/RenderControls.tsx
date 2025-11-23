@@ -62,7 +62,16 @@ export const RenderControls: React.FC<{
               type="number"
               disabled={state.status === "invoking"}
               value={duration}
-              onChange={(e) => setDuration(Number(e.target.value))}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                if (e.target.value === "" || value < 1) {
+                  setDuration(1); // Set minimum to 1
+                } else if (value > 60) {
+                  setDuration(60); // Set maximum to 60
+                } else {
+                  setDuration(value);
+                }
+              }}
               min={1}
               max={60}
               placeholder="Enter duration in seconds"
@@ -77,7 +86,7 @@ export const RenderControls: React.FC<{
           
           <AlignEnd>
             <Button
-              disabled={state.status === "invoking"}
+              disabled={state.status === "invoking" || duration < 1 || duration > 60}
               loading={state.status === "invoking"}
               onClick={renderMedia}
             >
