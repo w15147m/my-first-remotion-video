@@ -12,7 +12,7 @@ import { RenderControls } from "~/components/video/RenderControls";
 import { CompositionProps } from "~/remotion/schemata";
 
 export default function Index() {
-  const [text, setText] = useState("React Router + Remotion");
+  const [text, setText] = useState("video-title");
   const [duration, setDuration] = useState(7); // Added duration state
 
   const inputProps: z.infer<typeof CompositionProps> = useMemo(() => {

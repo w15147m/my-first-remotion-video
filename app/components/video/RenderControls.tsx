@@ -69,9 +69,7 @@ export const RenderControls: React.FC<{
                 // Prevent empty or invalid values
                 if (e.target.value === "" || value < 1) {
                   setDuration(10); // Set minimum to 1
-                } else if (value > 60) {
-                  setDuration(60); // Set maximum to 60
-                } else {
+                }  else {
                   setDuration(value);
                 }
               }}
