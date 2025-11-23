@@ -64,6 +64,7 @@ export const RenderControls: React.FC<{
               value={duration}
               onChange={(e) => {
                 const value = Number(e.target.value);
+                // Prevent empty or invalid values
                 if (e.target.value === "" || value < 1) {
                   setDuration(1); // Set minimum to 1
                 } else if (value > 60) {

@@ -9,8 +9,6 @@ import "../styles/app.css";
 import { z } from "zod";
 import { Main } from "~/remotion/components/Main"; 
 import { RenderControls } from "~/components/video/RenderControls"; 
-import { Spacing } from "~/components/layout/Spacing"; 
-import { Tips } from "~/components/ui/Tips"; 
 import { CompositionProps } from "~/remotion/schemata";
 
 export default function Index() {
@@ -57,11 +55,7 @@ export default function Index() {
           setDuration={setDuration}
           inputProps={inputProps}
         />
-        <Spacing />
-        <Spacing />
-        <Spacing />
-        <Spacing />
-        <Tips />
+      
       </div>
     </div>
   );
