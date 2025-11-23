@@ -19,16 +19,17 @@ export const RenderControls: React.FC<{
   inputProps: z.infer<typeof CompositionProps>;
 }> = ({ text, setText, duration, setDuration, inputProps }) => {
   // Create a safe filename from the text
-  const filename = text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric with hyphens
-    .replace(/^-+|-+$/g, "") // Remove leading/trailing hyphens
-    + ".mp4"; // Add .mp4 extension
+  const filename =
+    text
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric with hyphens
+      .replace(/^-+|-+$/g, "") + // Remove leading/trailing hyphens
+    ".mp4"; // Add .mp4 extension
 
   const { renderMedia, state, undo } = useRendering(
-    COMPOSITION_ID, 
+    COMPOSITION_ID,
     inputProps,
-    filename
+    filename,
   );
 
   return (
@@ -37,8 +38,9 @@ export const RenderControls: React.FC<{
       state.status === "invoking" ||
       state.status === "error" ? (
         <>
-          {/* Title Input */}
-          <div>
+         <div className="flex justify-between gap-4 mb-4">
+               {/* Title Input */}
+          <div className="w-100">
             <label className="block text-sm font-medium text-foreground mb-1">
               Video Title
             </label>
@@ -50,11 +52,11 @@ export const RenderControls: React.FC<{
               name="title"
             />
           </div>
-          
-          <Spacing />
+
 
           {/* Duration Input */}
-          <div>
+          <div className="w-100">
+
             <label className="block text-sm font-medium text-foreground mb-1">
               Duration (seconds)
             </label>
@@ -66,7 +68,7 @@ export const RenderControls: React.FC<{
                 const value = Number(e.target.value);
                 // Prevent empty or invalid values
                 if (e.target.value === "" || value < 1) {
-                  setDuration(1); // Set minimum to 1
+                  setDuration(10); // Set minimum to 1
                 } else if (value > 60) {
                   setDuration(60); // Set maximum to 60
                 } else {
@@ -78,23 +80,23 @@ export const RenderControls: React.FC<{
               placeholder="Enter duration in seconds"
               name="duration"
             />
-            <p className="text-xs text-subtitle mt-1">
-              Video length: {duration} seconds ({duration * 30} frames at 30 FPS)
-            </p>
-          </div>
-
-          <Spacing />
           
+          </div>
+         </div>
+
+
           <AlignEnd>
             <Button
-              disabled={state.status === "invoking" || duration < 1 || duration > 60}
+              disabled={
+                state.status === "invoking" || duration < 1 || duration > 60
+              }
               loading={state.status === "invoking"}
               onClick={renderMedia}
             >
               Render video
             </Button>
           </AlignEnd>
-          
+
           {state.status === "error" ? (
             <ErrorComp message={state.error.message}></ErrorComp>
           ) : null}

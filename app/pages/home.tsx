@@ -39,8 +39,6 @@ export default function Index() {
             compositionHeight={COMPOSITION_HEIGHT}
             compositionWidth={COMPOSITION_WIDTH}
             style={{
-              // Can't use tailwind class for width since player's default styles take presedence over tailwind's,
-              // but not over inline styles
               width: "100%",
             }}
             controls
